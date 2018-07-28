@@ -1,7 +1,8 @@
 ﻿using System;
 
-namespace MonoGameJam
+namespace Game1
 {
+#if WINDOWS || LINUX
     /// <summary>
     /// The main class.
     /// </summary>
@@ -17,4 +18,5 @@ namespace MonoGameJam
                 game.Run();
         }
     }
+#endif
 }
