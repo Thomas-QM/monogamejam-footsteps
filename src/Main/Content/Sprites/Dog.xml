@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<XnaContent>
+<Asset Type="System.Collections.Generic.Dictionary[System.String, Microsoft.Xna.Framework.Rectangle]">
+<Item><Key>dogBackward000</Key><Value>0 0 32 32</Value></Item>
+<Item><Key>dogBackward001</Key><Value>33 0 32 32</Value></Item>
+<Item><Key>dogBackward002</Key><Value>66 0 32 32</Value></Item>
+<Item><Key>dogBackward003</Key><Value>0 33 32 32</Value></Item>
+<Item><Key>dogBark000</Key><Value>33 33 32 32</Value></Item>
+<Item><Key>dogBark001</Key><Value>0 66 32 32</Value></Item>
+<Item><Key>dogBark002</Key><Value>33 66 32 32</Value></Item>
+<Item><Key>dogForward000</Key><Value>66 33 32 32</Value></Item>
+<Item><Key>dogForward001</Key><Value>66 66 32 32</Value></Item>
+<Item><Key>dogForward002</Key><Value>99 0 32 32</Value></Item>
+<Item><Key>dogForward003</Key><Value>99 33 32 32</Value></Item>
+<Item><Key>dogLeft000</Key><Value>132 0 32 32</Value></Item>
+<Item><Key>dogLeft001</Key><Value>99 66 32 32</Value></Item>
+<Item><Key>dogLeft002</Key><Value>132 33 32 32</Value></Item>
+<Item><Key>dogLeft003</Key><Value>165 0 32 32</Value></Item>
+<Item><Key>dogRight000</Key><Value>165 33 32 32</Value></Item>
+<Item><Key>dogRight001</Key><Value>132 66 32 32</Value></Item>
+<Item><Key>dogRight002</Key><Value>165 66 32 32</Value></Item>
+<Item><Key>dogRight003</Key><Value>0 99 32 32</Value></Item>
+<Item><Key>dogRun000</Key><Value>33 99 32 32</Value></Item>
+<Item><Key>dogRun001</Key><Value>0 132 32 32</Value></Item>
+<Item><Key>dogRun002</Key><Value>66 99 32 32</Value></Item>
+<Item><Key>dogSad000</Key><Value>33 132 32 32</Value></Item>
+<Item><Key>dogSit000</Key><Value>0 165 32 32</Value></Item>
+<Item><Key>dogSit001</Key><Value>33 165 32 32</Value></Item>
+<Item><Key>dogSit002</Key><Value>99 99 32 32</Value></Item>
+<Item><Key>dogSit003</Key><Value>66 132 32 32</Value></Item>
+<Item><Key>dogSitRight000</Key><Value>132 99 32 32</Value></Item>
+<Item><Key>dogSitRight001</Key><Value>99 132 32 32</Value></Item>
+<Item><Key>dogSitRight002</Key><Value>66 165 32 32</Value></Item>
+<Item><Key>dogSitRight003</Key><Value>132 132 32 32</Value></Item>
+<Item><Key>dogSitRight004</Key><Value>99 165 32 32</Value></Item>
+<Item><Key>dogSleep000</Key><Value>165 99 32 32</Value></Item>
+<Item><Key>dogSleep001</Key><Value>165 132 32 32</Value></Item>
+</Asset>
+</XnaContent>

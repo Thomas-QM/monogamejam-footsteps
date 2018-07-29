@@ -25,6 +25,11 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/Dog.png
 
+#begin Sprites/Dog.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Sprites/Dog.xml
+
 #begin Tiles/Debug.png
 /importer:TextureImporter
 /processor:TextureProcessor

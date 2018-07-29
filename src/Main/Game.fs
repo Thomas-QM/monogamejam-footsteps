@@ -23,6 +23,7 @@ type MainGame () as x =
         x.Window.AllowUserResizing <- true
         x.Window.ClientSizeChanged.Add (fun _ -> graphics.PreferredBackBufferWidth <- x.Window.ClientBounds.Width;
                                                     graphics.PreferredBackBufferHeight <- x.Window.ClientBounds.Height;
+                                                    printfn "NEW RES: %A" x.Window.ClientBounds;
                                                     graphics.ApplyChanges())
 
          // TODO: Add your initialization logic here
@@ -38,14 +39,12 @@ type MainGame () as x =
         ()
 
     override x.Update (gameTime) =
-
-        printfn "Elapsed: %A" gameTime.ElapsedGameTime
+        (gameTime.ElapsedGameTime, toDependencies()) |> Update |> update
 
         ()
 
     override x.Draw (gameTime) =
-        do x.GraphicsDevice.Clear Color.CornflowerBlue
-
+        do x.GraphicsDevice.Clear Color.Black
         toDependencies() |> Draw |> update
 
         ()

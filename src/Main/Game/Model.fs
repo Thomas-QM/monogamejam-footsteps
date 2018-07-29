@@ -19,6 +19,7 @@ type Message =
     | PlayerMove of Vector2
     | PlayerGrab
     | Draw of GameDependencies
+    | Update of System.TimeSpan*GameDependencies
 
 type Game = {Entities:Entity list; Environment: Environment; Camera:Camera2D}
 type GameState = MainMenu | ActiveGame of Game
