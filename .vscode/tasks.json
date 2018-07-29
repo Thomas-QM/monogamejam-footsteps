@@ -5,7 +5,7 @@
     "tasks": [
         {
             "label": "build",
-            "command": "dotnet build",
+            "command": "cd src/Main; dotnet build",
             "type": "shell",
             "group": "build",
             "presentation": {

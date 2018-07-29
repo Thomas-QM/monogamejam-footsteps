@@ -20,4 +20,8 @@
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.*" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Main\MonoGameJam.fsproj" />
+  </ItemGroup>
 </Project>
