@@ -5,6 +5,7 @@ open Microsoft.Xna.Framework
 open Game.Update
 open Microsoft.Xna.Framework.Graphics
 open Environment.Model
+open InputStateManager
 
 type MainGame () as x =
     inherit Game()
@@ -12,9 +13,10 @@ type MainGame () as x =
     do x.Content.RootDirectory <- "Content"
     let graphics = new GraphicsDeviceManager(x)
     let mutable (tileSet:TileSet) = Map.empty
+    let input = new InputManager()
     let mutable spriteBatch = Unchecked.defaultof<SpriteBatch>
 
-    let toDependencies () = {Content=x.Content; Graphics=graphics; TileSet=tileSet; Sprite=spriteBatch}
+    let toDependencies () = {Content=x.Content; Graphics=graphics; TileSet=tileSet; Sprite=spriteBatch; Input=input}
 
     override x.Initialize() =
         do spriteBatch <- new SpriteBatch(x.GraphicsDevice)
@@ -39,7 +41,8 @@ type MainGame () as x =
         ()
 
     override x.Update (gameTime) =
-        (gameTime.ElapsedGameTime, toDependencies()) |> Update |> update
+        input.Update()
+        (gameTime, toDependencies()) |> Update |> update
 
         ()
 

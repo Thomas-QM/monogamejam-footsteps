@@ -15,6 +15,7 @@
     <Compile Include="./Game/Entity/Entity.fs" />
     
     <Compile Include="./Game/Model.fs" />
+    <Compile Include="./Game/Input.fs" />
     <Compile Include="./Game/Update.fs" />
     <Compile Include="./Game.fs" />
     <Compile Include="./Program.fs" />
