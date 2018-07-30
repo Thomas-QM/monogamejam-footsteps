@@ -6,8 +6,9 @@ open MonoGame.Spritesheet
 open Microsoft.Xna.Framework
 open MonoGame.Spritesheet
 
-type EntityData = Player of Player*PlayerAnimation
-type Entity = {Entity: EntityData; Position: Vector2}
+type Entity = Player of Player
 
-let UpdateEntity (sprites:SpriteBatch) elapsed deps x =
-    ()
+let InitializeEntities c = [defaultPlayer c]
+
+let UpdateEntities frame =
+    List.map (function | Player y -> UpdatePlayer frame y |> Player)

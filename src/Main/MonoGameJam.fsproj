@@ -9,18 +9,21 @@
     <Compile Include="./Utility/Credit.fs" />
     <Compile Include="./Utility/Animation.fs" />
     <Compile Include="./Game/Object/Object.fs" />
+
+    <Compile Include="./Game/Entity/Model.fs" />
     <Compile Include="./Game/Entity/Player/Player.fs" />
     <Compile Include="./Game/Entity/Entity.fs" />
+    
     <Compile Include="./Game/Model.fs" />
     <Compile Include="./Game/Update.fs" />
     <Compile Include="./Game.fs" />
     <Compile Include="./Program.fs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="InputStateManager" Version="1.2.1.4" />
     <PackageReference Include="MonoGame.Content.Builder" Version="3.7.0.4" />
     <PackageReference Include="Monogame.Extended" Version="1.1.0" />
     <PackageReference Include="MonoGame.Framework.DesktopGL.Core" Version="3.7.0.7" />
-    <PackageReference Include="MonoGame.Spritesheet" Version="1.2.1" />
     <PackageReference Include="MonoGame.Spritesheet.Pipeline" Version="1.2.1" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>

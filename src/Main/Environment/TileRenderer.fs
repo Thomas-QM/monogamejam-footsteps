@@ -14,7 +14,7 @@ let SelectTile (env:Environment) x y =
         | Some x -> env, x
         | None ->
             let tile:ClimateTile = if rand.Next(0,2) = 1 then Debug else Hot Sand
-            Map.add (x,y) tile env, tile //TODO: Separate tile rendering and generation
+            Map.add (x,y) tile env, tile //TODO: Separate tile rendering and generation, make a tile array to store tile positions which update on update as well
 
 let tilesize = 10
 
@@ -26,12 +26,15 @@ let RenderTiles (graphics:GraphicsDeviceManager) (cam:Camera2D) (env:Environment
     let tilewidth = width/tilesize
 
     let camx, camy = cam.Position.X, cam.Position.Y
-    let tilex, tiley = int camx/tilewidth, int camy/tileheight
-    let off = new Vector2(camx%float32 tilewidth, camy%float32 (tilewidth/2))
+    let tilex, tiley = (camx |> floor |> int)/tilewidth, (camy |> floor |> int)/tileheight
+    let off = new Vector2(camx%float32 tilewidth, camy%float32 tileheight)
 
     let rows = height/tileheight
-    let row = [-6 .. tilesize*2+6]
-    let tiles = [-6 .. rows+6] |> List.collect (fun y -> row |> List.map (fun x -> (tileheight*y)+(int x)%2*(tileheight/2), x*tilewidth/2))
+    let row = [0 .. tilesize*2]
+    let tiles =
+        [0 .. rows]
+        |> List.collect (fun y -> row |> List.map (fun x -> (tileheight*y)+(int x)%2 * (tileheight/2),
+                                                            x*tilewidth/2))
 
     tiles |> List.fold (fun env (y,x) ->
         let env, tile = SelectTile env ((x/tilewidth)-tilex) ((y/tileheight)-tiley)

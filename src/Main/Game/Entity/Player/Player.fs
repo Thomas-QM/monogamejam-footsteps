@@ -1,24 +1,29 @@
 module Entity.Player
 
 open Game.Object
-open Microsoft.Xna.Framework.Graphics
-open MonoGame.Spritesheet
 open Utility.Animation
+open Model
+open Microsoft.Xna.Framework.Graphics
 open Microsoft.Xna.Framework
-open System
 
-type PlayerAnimation = Run of int*WASDDir | Idle of int
-type Player = {Mouth: Item option}
+type PlayerAnimation = Run of int*WASDDir | Idle of WASDDir
+type Player = {Mouth: Item option; Animated:Animated<PlayerAnimation>; Position: Vector2}
 
-let updateAnimation f = function
-    | Run (x,y) -> Run (x+f%4, y)
-    | Idle x -> Idle (0)
+let UpdateAnimation f = function
+    | Run (x,y) -> Run (x+f%3, y)
+    | x -> x
 
-let drawPlayer (sprites:SpriteBatch) (sheet:GridSheet) (position:Vector2) (anim:PlayerAnimation) =
-    let (y,x) = match anim with
-                    | Run (x,Forward) -> 3,x
-                    | Run (x,Backward) -> 1,x
-                    | Run (x,Right) -> 2,x
-                    | Run (x,Left) -> 4,x
+let UpdatePlayer f player =
+    let {Animated=x,y,z} = player
+    let newanimation = UpdateAnimation f x
+    {player with Animated=newanimation,y,z}
 
-    sprites.Draw (texture=sheet.Texture, position=position, color=Color.White, sourceRectangle=Nullable(sheet.[x,y]))
+let DrawPlayer (sprites:SpriteBatch) {Mouth=mouth; Animated=(anim,tex,sheet); Position=position} =
+    let dir = match anim with | Run (_, dir) | Idle dir -> dir
+    let frame = match anim with | Run (x, _) -> x | Idle _ -> 0
+
+    let str = "dog" + dir.ToString() + FrameNum(frame)
+
+    sprites.Draw (texture=sheet, position=position, color=Color.White, sourceRectangle=System.Nullable(tex.Item(str)))
+
+let defaultPlayer contentmanager = {Mouth=None; Animated=ConstructAnimated contentmanager "Dog" (Idle Forward); Position=new Vector2(float32 0)}
