@@ -6,6 +6,7 @@
   <ItemGroup>
     <Compile Include="./Utility/Credit.fs" />
     <Compile Include="./Utility/Animation.fs" />
+    <Compile Include="./Utility/Coord.fs" />
     <Compile Include="./Utility/SpriteBatch.fs" />
 
     <Compile Include="./Environment/Model.fs" />

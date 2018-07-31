@@ -26,9 +26,10 @@ let UpdateTiles (graphics:GraphicsDeviceManager) (cam:ICamera) (env:Environment)
 
     let extratiles = 2
 
-    let camx, camy = cam.Position.X-float32 (extratiles*tilewidth), cam.Position.Y-float32 (extratiles*tileheight)
+    let campos = cam.Position-Vector2(cam.Width/float32 2, cam.Height/float32 2)
+    let camx, camy = campos.X-float32 (extratiles*tilewidth), campos.Y-float32 (extratiles*tileheight)
     let tilex, tiley = (camx |> int)/tilewidth, (camy |> int)/tileheight
-    let off = new Vector2(camx%float32 tilewidth, camy%float32 tileheight)
+    let off = Vector2(camx%float32 tilewidth, camy%float32 tileheight)
 
     let rows = height/tileheight
     let row = [0 .. (tilesize*2)+(extratiles*2)]
@@ -40,8 +41,8 @@ let UpdateTiles (graphics:GraphicsDeviceManager) (cam:ICamera) (env:Environment)
     tiles |> List.fold (fun env (y,x) ->
         let newtiles, tile = SelectTile env ((x/tilewidth)+tilex) ((y/tileheight)+tiley)
 
-        let vec = new Vector2(camx-off.X+float32 x, camy-off.Y+(y-tilewidth/2 |> float32))
-        let rendertile = {Position=vec-new Vector2(float32 1); Width=tilewidth+1; Tile=tile} //+1 to fix antialiased edges breaking up tiles
+        let vec = Vector2(camx-off.X+float32 x, camy-off.Y+(y-tilewidth/2 |> float32))
+        let rendertile = {Position=vec-Vector2(float32 1); Width=tilewidth+1; Tile=tile} //+1 to fix antialiased edges breaking up tiles
 
         {env with Tiles=newtiles; RenderTiles=rendertile::env.RenderTiles}) {env with RenderTiles=[]}
 

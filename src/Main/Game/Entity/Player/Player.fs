@@ -41,4 +41,4 @@ let MovePlayer (dir:Vector2) player =
     let newanim = match spritedir with | Some dir -> Run (frame, dir) | _ -> Idle olddir
     { player with Position = player.Position+dir; Animation=newanim }
 
-let defaultPlayer contentmanager = {Mouth=None; Animated=ConstructAnimated contentmanager "Dog"; Position=new Vector2(float32 0); Animation=Idle Forward}
+let defaultPlayer contentmanager = {Mouth=None; Animated=ConstructAnimated contentmanager "Dog"; Position=Vector2(float32 0); Animation=Idle Forward}

@@ -14,17 +14,18 @@ open MonoGame.Extended.ViewportAdapters
 open UI.Model
 open Comora
 
-let mutable state = MainMenu UI.Menu.menuui
+let mutable state = MainMenu (UI.Menu.menuui None, None)
 
 let rec update msg =
     let newstate, dispatch =
         match state, msg with
-            | MainMenu _, IntoGame {Graphics=graphics; Content=content; Viewport=view} ->
+            | MainMenu (_,None), IntoGame {Graphics=graphics; Content=content} ->
                 ActiveGame {Entities=defaultEntities content; Environment=defaultenv;}, []
-            | ActiveGame _, ToMainMenu -> state, []
+            | MainMenu (_,Some x), IntoGame {Graphics=graphics; Content=content} -> ActiveGame x,[]
+
             | ActiveGame x, Draw {TileSet=tileset; Sprite=sprite; Graphics=graphics; Camera=cam} ->
                 let {Environment=env; Entities=entities} = x
-                sprite.Begin(cam)
+                sprite.Begin(cam, SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp)
 
                 RenderTiles graphics env tileset sprite
                 DrawEntities sprite entities
@@ -44,18 +45,23 @@ let rec update msg =
                 let newentities = MapPlayer (Player.MovePlayer y) entities
                 ActiveGame {x with Entities=newentities}, []
 
-            | MainMenu x, Update (time, depends) ->
-                let {Input=input;} = depends
-                let newui, uimsg = UpdateUI x update input
-                MainMenu newui, (uimsg |> List.map (fun x -> x depends))
-            | MainMenu x, Draw {Graphics=graphics; Camera=cam; Sprite=sprite; UIDependencies=uideps} ->
-                cam.Position <- new Vector2(float32 0)
-                sprite.Begin(cam)
+            | ActiveGame x, ToMainMenu ->
+                let game = Some x
+                MainMenu (UI.Menu.menuui game, game), []
+            | MainMenu (x, game), Update (time, depends) ->
+                let {Input=input; Camera=cam; Graphics=graphics} = depends
+                let newui, uimsg = UpdateUI x update input graphics cam
+                MainMenu (newui, game), (uimsg |> List.map (fun x -> x depends))
+            | MainMenu (x, _), Draw {Graphics=graphics; Camera=cam; Sprite=sprite; UIDependencies=uideps} ->
+                cam.Position <- Vector2(float32 0) + Vector2(cam.Width/float32 2, cam.Height/float32 2) //TODO: make util function for this
+                sprite.Begin(cam, SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp)
                 DrawUI x sprite uideps
                 sprite.End()
                 state, []
-            | _ ->
-                state, []
+            | _, Quit {Game=game} ->
+                game.Exit()
+                Exit, []
+            | _ -> state, []
 
     state <- newstate
     dispatch |> List.iter update

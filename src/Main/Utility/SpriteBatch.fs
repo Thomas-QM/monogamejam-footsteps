@@ -12,10 +12,10 @@ let DrawStringRect (spriteBatch:SpriteBatch) (font:BitmapFont) (str:string) (bou
     let scale = min xscale yscale //5
     let strwidth = size.Width * scale |> int
     let strheight = size.Height * scale |> int
-    let pos = new Vector2(((boundaries.Width-strwidth)/2)+boundaries.X |> float32, ((boundaries.Height-strheight)/2)+boundaries.Y |> float32)
+    let pos = Vector2(((boundaries.Width-strwidth)/2)+boundaries.X |> float32, ((boundaries.Height-strheight)/2)+boundaries.Y |> float32)
 
     let rotation = 0.0 |> float32
-    let origin = new Vector2(float32 0, float32 0)
+    let origin = Vector2(float32 0, float32 0)
     let layer = 0.0 |> float32
     let effects = new SpriteEffects();
 
@@ -29,13 +29,13 @@ let DrawStringRect (spriteBatch:SpriteBatch) (font:BitmapFont) (str:string) (bou
     // // Figure out the location to absolutely-center it in the boundaries rectangle.
     // int strWidth = (int)Math.Round(size.X * scale);
     // int strHeight = (int)Math.Round(size.Y * scale);
-    // Vector2 position = new Vector2();
+    // Vector2 position = Vector2();
     // position.X = (((boundaries.Width - strWidth) / 2) + boundaries.X);
     // position.Y = (((boundaries.Height - strHeight) / 2) + boundaries.Y);
 
     // // A bunch of settings where we just want to use reasonable defaults.
     // float rotation = 0.0f;
-    // Vector2 spriteOrigin = new Vector2(0, 0);
+    // Vector2 spriteOrigin = Vector2(0, 0);
     // float spriteLayer = 0.0f; // all the way in the front
     // SpriteEffects spriteEffects = new SpriteEffects();
 

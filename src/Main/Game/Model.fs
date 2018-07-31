@@ -13,7 +13,7 @@ open MonoGame.Extended.ViewportAdapters
 open UI.Model
 open Comora
 
-type GameDependencies = {Viewport:BoxingViewportAdapter; UIDependencies:UIDependencies; Content:ContentManager; Graphics:GraphicsDeviceManager; Camera:ICamera; TileSet:TileSet; Sprite: SpriteBatch; Input:InputManager}
+type GameDependencies = {UIDependencies:UIDependencies; Game:Game; Content:ContentManager; Graphics:GraphicsDeviceManager; Camera:ICamera; TileSet:TileSet; Sprite: SpriteBatch; Input:InputManager}
 
 type Message =
     | ToMainMenu
@@ -23,13 +23,9 @@ type Message =
     | Draw of GameDependencies
     | Update of GameTime*GameDependencies
     | Resize of int*int
+    | Quit of GameDependencies
 
 type Game = {Entities:Entity list; Environment: Environment}
-type GameState = MainMenu of UI<GameDependencies, Message> | ActiveGame of Game
+type GameState = MainMenu of UI<GameDependencies, Message>*Game option | ActiveGame of Game | Exit
 
 let defaultstate = MainMenu
-
-let SaveState state =
-    let x = JsonConvert.SerializeObject state
-
-    ()
