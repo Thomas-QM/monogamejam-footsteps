@@ -8,11 +8,12 @@ open Entity
 open MonoGame.Extended
 open Microsoft.Xna.Framework.Graphics
 open Microsoft.Xna.Framework.Content
-open Microsoft.Xna.Framework.Graphics
-open Microsoft.Xna.Framework.Graphics
 open InputStateManager
+open MonoGame.Extended.ViewportAdapters
+open UI.Model
+open Comora
 
-type GameDependencies = {Content:ContentManager; Graphics:GraphicsDeviceManager; TileSet:TileSet; Sprite: SpriteBatch; Input:InputManager}
+type GameDependencies = {Viewport:BoxingViewportAdapter; UIDependencies:UIDependencies; Content:ContentManager; Graphics:GraphicsDeviceManager; Camera:ICamera; TileSet:TileSet; Sprite: SpriteBatch; Input:InputManager}
 
 type Message =
     | ToMainMenu
@@ -21,9 +22,10 @@ type Message =
     | PlayerGrab
     | Draw of GameDependencies
     | Update of GameTime*GameDependencies
+    | Resize of int*int
 
-type Game = {Entities:Entity list; Environment: Environment; Camera:Camera2D}
-type GameState = MainMenu | ActiveGame of Game
+type Game = {Entities:Entity list; Environment: Environment}
+type GameState = MainMenu of UI<GameDependencies, Message> | ActiveGame of Game
 
 let defaultstate = MainMenu
 

@@ -3,9 +3,8 @@
 open Environment
 open Model
 open Microsoft.Xna.Framework
-open MonoGame.Extended
 open Microsoft.Xna.Framework.Graphics
-open Microsoft.Xna.Framework
+open Comora
 
 let rand = new System.Random()
 
@@ -18,9 +17,9 @@ let SelectTile ({Tiles=env}:Environment) x y =
 
 let tilesize = 10
 
-let UpdateTiles (graphics:GraphicsDeviceManager) (cam:Camera2D) (env:Environment) =
-    let width = graphics.PreferredBackBufferWidth
-    let height = graphics.PreferredBackBufferHeight
+let UpdateTiles (graphics:GraphicsDeviceManager) (cam:ICamera) (env:Environment) =
+    let width = cam.Width |> int
+    let height = cam.Height |> int
 
     let tileheight = width/(tilesize*2)
     let tilewidth = width/tilesize
@@ -35,14 +34,14 @@ let UpdateTiles (graphics:GraphicsDeviceManager) (cam:Camera2D) (env:Environment
     let row = [0 .. (tilesize*2)+(extratiles*2)]
     let tiles =
         [0 .. rows+(extratiles*2)]
-        |> List.collect (fun y -> row |> List.map (fun x -> (tileheight*y)+x%2 * (tileheight/2),
+        |> List.collect (fun y -> row |> List.map (fun x -> (tileheight*y)+(x%2) * (tileheight/2),
                                                             x*tilewidth/2))
 
     tiles |> List.fold (fun env (y,x) ->
         let newtiles, tile = SelectTile env ((x/tilewidth)+tilex) ((y/tileheight)+tiley)
 
         let vec = new Vector2(camx-off.X+float32 x, camy-off.Y+(y-tilewidth/2 |> float32))
-        let rendertile = {Position=vec; Width=tilewidth; Tile=tile}
+        let rendertile = {Position=vec-new Vector2(float32 1); Width=tilewidth+1; Tile=tile} //+1 to fix antialiased edges breaking up tiles
 
         {env with Tiles=newtiles; RenderTiles=rendertile::env.RenderTiles}) {env with RenderTiles=[]}
 
