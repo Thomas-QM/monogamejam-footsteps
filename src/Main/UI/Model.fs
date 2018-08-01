@@ -36,7 +36,7 @@ let MouseInBounds (cam:ICamera) graphics (input:InputManager) (bounds:Rectangle)
 
 let UpdateUI (ui:UI<_,_>) (dispatch:'T -> unit) (input:InputManager) graphics (cam:ICamera) =
     let mouseInBounds = MouseInBounds cam graphics input
-    let clicking = input.Mouse.Was.Down(Inputs.Mouse.Button.LEFT)
+    let clicking = input.Mouse.Is.Release (Inputs.Mouse.Button.LEFT)
     ui |> List.fold (fun (controls, msgs) x ->
                         let {Bounds=bounds; Control=control} = x
                         let newcontrol, newmsgs =

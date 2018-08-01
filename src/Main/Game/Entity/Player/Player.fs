@@ -5,6 +5,8 @@ open Utility.Animation
 open Model
 open Microsoft.Xna.Framework.Graphics
 open Microsoft.Xna.Framework
+open GameEnvironment
+open GameEnvironment.Model
 
 type PlayerAnimation = Run of int*WASDDir | Idle of WASDDir
 type Player = {Mouth: Item option; Animated:Animated; Animation:PlayerAnimation; Position: Vector2}
@@ -27,7 +29,7 @@ let DrawPlayer (sprites:SpriteBatch) {Mouth=mouth; Animation=anim; Animated=(tex
     let rect = new Rectangle(int position.X, int position.Y, 50, 50)
     sprites.Draw (texture=sheet, color=Color.White, sourceRectangle=System.Nullable(tex.Item(str)), destinationRectangle=rect)
 
-let MovePlayer (dir:Vector2) player =
+let MovePlayer (dir:Vector2) ({RenderTiles=tiles}) player =
     let spritedir =
         match (float dir.X, float dir.Y) with
             | 0.0,0.0 -> None
@@ -39,6 +41,10 @@ let MovePlayer (dir:Vector2) player =
     let frame = match player.Animation with | Run (f, _) -> f | Idle _ -> 0
 
     let newanim = match spritedir with | Some dir -> Run (frame, dir) | _ -> Idle olddir
-    { player with Position = player.Position+dir; Animation=newanim }
+
+    let newpos = player.Position+dir
+    let colliding = tiles |> List.filter (function | {Collision=Block} -> true | _ -> false) |> List.exists (fun {Region=x} -> x.Contains (newpos))
+    let newerpos = if colliding then player.Position else newpos //smart naming
+    { player with Position = newerpos; Animation=newanim }
 
 let defaultPlayer contentmanager = {Mouth=None; Animated=ConstructAnimated contentmanager "Dog"; Position=Vector2(float32 0); Animation=Idle Forward}

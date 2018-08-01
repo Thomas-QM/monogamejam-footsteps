@@ -4,7 +4,7 @@ open Game.Model
 open Microsoft.Xna.Framework
 open Game.Update
 open Microsoft.Xna.Framework.Graphics
-open Environment.Model
+open GameEnvironment.Model
 open InputStateManager
 open MonoGame.Extended.ViewportAdapters
 open UI.Model
@@ -35,10 +35,10 @@ type MainGame () as x =
         do base.Initialize()
         x.IsMouseVisible <- true
         x.Window.AllowUserResizing <- true
-        x.Window.ClientSizeChanged.Add (fun _ -> graphics.PreferredBackBufferWidth <- x.Window.ClientBounds.Width;
-                                                    graphics.PreferredBackBufferHeight <- x.Window.ClientBounds.Height;
-                                                    Resize (graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight) |> update;
-                                                    graphics.ApplyChanges())
+        x.Window.ClientSizeChanged.Add (fun _ -> graphics.PreferredBackBufferWidth <- x.Window.ClientBounds.Width
+                                                 graphics.PreferredBackBufferHeight <- x.Window.ClientBounds.Height
+                                                 Resize (graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight) |> update
+                                                 graphics.ApplyChanges())
 
         x.Exiting.Add (fun _ -> state <- Exit)
 
@@ -49,13 +49,12 @@ type MainGame () as x =
 
     override x.LoadContent() =
         camera.LoadContent()
-
-        emptytex <- new Texture2D (x.GraphicsDevice, 1, 1)
         uideps <- {
-                    Fonts=[Typograph, x.Content.Load<BitmapFont> ("Fonts/Typograph")] |> Map.ofList
-                    ButtonTextures=ButtonTextures |> List.map (fun y -> (y, y.ToString() |> sprintf "ButtonTextures/%s" |> x.Content.Load)) |> Map.ofList
-                }
-        tileSet <- tiles |> List.map (fun y -> (y, getTile x.Content y)) |> Map.ofList
+            Fonts=[Typograph, x.Content.Load<BitmapFont> ("Fonts/Typograph")] |> Map.ofList
+            ButtonTextures=ButtonTextures |> List.map (fun y -> (y, y.ToString() |> sprintf "ButtonTextures/%s" |> x.Content.Load)) |> Map.ofList
+        }
+        
+        tileSet <- tiles |> List.map (fun (_,y) -> (y, getTile x.Content y)) |> Map.ofList
         //do toDependencies() |> Game.Model.IntoGame |> update
          // TODO: use this.Content to load your game content here
 
@@ -63,7 +62,7 @@ type MainGame () as x =
 
     override x.Update (gameTime) =
         match state with
-            | Exit -> ()
+            | Exit -> x.Exit()
             | _ ->
                 camera.Update (gameTime)
                 input.Update ()

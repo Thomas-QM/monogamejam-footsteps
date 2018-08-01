@@ -2,7 +2,7 @@
 
 open System.IO
 open Microsoft.Xna.Framework
-open Environment.Model
+open GameEnvironment.Model
 open Newtonsoft.Json
 open Entity
 open MonoGame.Extended
@@ -17,6 +17,7 @@ type GameDependencies = {UIDependencies:UIDependencies; Game:Game; Content:Conte
 
 type Message =
     | ToMainMenu
+    | ToCredits of GameDependencies
     | IntoGame of GameDependencies
     | PlayerMove of Vector2
     | PlayerGrab
@@ -25,7 +26,7 @@ type Message =
     | Resize of int*int
     | Quit of GameDependencies
 
-type Game = {Entities:Entity list; Environment: Environment}
+type Game = {Entities:Entity list; GameEnvironment: GameEnvironment}
 type GameState = MainMenu of UI<GameDependencies, Message>*Game option | ActiveGame of Game | Exit
 
 let defaultstate = MainMenu

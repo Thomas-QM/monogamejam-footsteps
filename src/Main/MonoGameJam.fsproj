@@ -19,6 +19,7 @@
 
     <Compile Include="./Game/Entity/Model.fs" />
     <Compile Include="./Game/Entity/Player/Player.fs" />
+    <Compile Include="./Game/Entity/Smell/Smell.fs" />
     <Compile Include="./Game/Entity/Entity.fs" />
 
     <Compile Include="./Game/Model.fs" />
