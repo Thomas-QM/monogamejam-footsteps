@@ -12,7 +12,7 @@ type ClimateTile = Climate*Tile
 type TileSet = Map<Tile, Texture2D>
 type Collision = Block | NoCollision
 
-type RenderTile = {Region:Rectangle; Tile:Tile; Collision:Collision}
+type RenderTile = {Position:Vector2; Relative:Vector2; Width:int; Tile:Tile; Collision:Collision}
 type GameEnvironment = {RenderTiles: RenderTile list; Tiles:Map<int*int, ClimateTile>}
 
 let tiles = [Hot,Sand; Hot,Water;]//@([Grass; GrassPath; DirtWall] |> List.map Medium)@([Snow; SnowPath] |> List.map Cold)

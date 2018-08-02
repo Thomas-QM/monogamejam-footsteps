@@ -3,7 +3,7 @@ module Game.Update
 open Game
 open System
 open Model
-open Environment.TileSelector
+open GameEnvironment.TileSelector
 open GameEnvironment.Model
 open MonoGame.Extended
 open Microsoft.Xna.Framework
@@ -27,7 +27,7 @@ let rec update msg =
                 let {GameEnvironment=env; Entities=entities} = x
                 sprite.Begin(cam, SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp)
 
-                RenderTiles graphics env tileset sprite
+                RenderTiles graphics cam env tileset sprite
                 DrawEntities sprite entities
 
                 sprite.End()
@@ -36,6 +36,7 @@ let rec update msg =
                 let {Entities=entities; GameEnvironment=env} = x
                 let player = GetPlayer entities
                 cam.Position <- player.Position
+                //cam.Zoom <- float32 0.4
 
                 let newenv = UpdateTiles graphics cam env
                 let newentities = entities |> UpdateEntities (time.TotalGameTime.TotalSeconds*6.0 |> int)

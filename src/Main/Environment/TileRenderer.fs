@@ -1,10 +1,12 @@
-﻿module Environment.TileSelector
+﻿module GameEnvironment.TileSelector
 
 open GameEnvironment
 open Model
 open Microsoft.Xna.Framework
 open Microsoft.Xna.Framework.Graphics
 open Comora
+open Utility
+open Utility.Coord
 
 let rand = new System.Random()
 
@@ -16,41 +18,42 @@ let SelectTile ({Tiles=env}:GameEnvironment) x y =
             Map.add (x,y) (climate, tile) env, tile //TODO: Separate tile rendering and generation, make a tile array to store tile positions which update on update as well
 
 let tilesize = 10
+let extratiles = 5
 
 let UpdateTiles (graphics:GraphicsDeviceManager) (cam:ICamera) (env:GameEnvironment) =
     let width = cam.Width |> int
     let height = cam.Height |> int
 
-    let tileheight = width/(tilesize*2)
     let tilewidth = width/tilesize
+    let tileheight = height/(tilesize*2)
 
-    let extratiles = 5
+    let extrasize = Vector2(extratiles*(tileheight/2) |> float32, extratiles*(tileheight/2) |> float32)
+    let relative = (cam.Position - Vector2(float32 0, cam.Height)) - extrasize//*Vector2(float32 1, float32 2))
+    let campos = (CamPos cam) - extrasize
 
-    let campos = cam.Position-Vector2(cam.Width/float32 2, cam.Height/float32 2)
-    let camx, camy = campos.X-float32 (extratiles*tilewidth), campos.Y-float32 (extratiles*tileheight)
-    let tilex, tiley = (camx |> int)/tilewidth, (camy |> int)/tileheight
-    let off = Vector2(camx%float32 tilewidth, camy%float32 tileheight)
+    let tilex, tiley = (campos.X |> int)/tilewidth, (campos.Y |> int)/tilewidth
+    let off = Vector2(campos.X%float32 tilewidth, campos.Y%float32 tilewidth)
 
     let rows = height/tileheight
-    let row = [0 .. (tilesize*2)+(extratiles*2)]
+    let row = [0 .. (tilesize)*2+extratiles]
     let tiles =
-        [0 .. rows+(extratiles*2)]
-        |> List.collect (fun y -> row |> List.map (fun x -> (tileheight*y)+(x%2) * (tileheight/2),
-                                                            x*tilewidth/2))
+        [0 .. rows+extratiles]
+        |> List.collect (fun y -> row |> List.map (fun x -> y*tilewidth/2, x*tilewidth/2))
 
     tiles |> List.fold (fun env (y,x) ->
-        let newtiles, tile = SelectTile env ((x/tilewidth)+tilex) ((y/tileheight)+tiley)
+        let newtiles, tile = SelectTile env ((x/tilewidth)+tilex) ((y/tilewidth)+tiley)
 
-        let vec = Vector2(camx-off.X+float32 x, camy-off.Y+(y-tilewidth/2 |> float32))
+        let pos = Vector2(float32 x-off.X, float32 y-off.Y)
         let collision = if collide |> List.contains tile then Block else NoCollision
 
-        let rendertile = {Region=new Rectangle(int vec.X-1, int vec.Y-1, tilewidth+1, tilewidth+1);
-                            Tile=tile; Collision=collision}
+        let rendertile = {Relative=relative; Position=pos; Width=tilewidth; Tile=tile; Collision=collision}
 
         {env with Tiles=newtiles; RenderTiles=rendertile::env.RenderTiles}) {env with RenderTiles=[]}
 
-let RenderTiles (graphics:GraphicsDeviceManager) ({RenderTiles=tiles}:GameEnvironment) content (sprites:SpriteBatch) =
-    tiles |> List.iter (fun {Region=pos; Tile=tile;} ->
+let RenderTiles (graphics:GraphicsDeviceManager) (cam:ICamera) ({RenderTiles=tiles}:GameEnvironment) content (sprites:SpriteBatch) =
+    tiles |> List.iter (fun {Position=pos; Relative=relative; Width=width; Tile=tile;} ->
         let tex = Map.find tile content
-        sprites.Draw(tex, pos, Color.White)
+
+        let pos = pos |> CartesianToIsometric |> (fun x -> x+relative)
+        sprites.Draw(tex, new Rectangle(int pos.X, int pos.Y, width, width), Color.White)
     )

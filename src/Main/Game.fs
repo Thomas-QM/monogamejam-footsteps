@@ -35,15 +35,16 @@ type MainGame () as x =
         do base.Initialize()
         x.IsMouseVisible <- true
         x.Window.AllowUserResizing <- true
-        x.Window.ClientSizeChanged.Add (fun _ -> graphics.PreferredBackBufferWidth <- x.Window.ClientBounds.Width
-                                                 graphics.PreferredBackBufferHeight <- x.Window.ClientBounds.Height
-                                                 Resize (graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight) |> update
-                                                 graphics.ApplyChanges())
+        x.Window.ClientSizeChanged.Add (fun _ ->
+                                            graphics.PreferredBackBufferWidth <- x.Window.ClientBounds.Width
+                                            graphics.PreferredBackBufferHeight <- x.Window.ClientBounds.Height
+                                            Resize (graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight) |> update
+                                            graphics.ApplyChanges())
 
         x.Exiting.Add (fun _ -> state <- Exit)
 
 
-         // TODO: Add your initialization logic here
+        // TODO: Add your initialization logic here
 
         ()
 
@@ -53,10 +54,10 @@ type MainGame () as x =
             Fonts=[Typograph, x.Content.Load<BitmapFont> ("Fonts/Typograph")] |> Map.ofList
             ButtonTextures=ButtonTextures |> List.map (fun y -> (y, y.ToString() |> sprintf "ButtonTextures/%s" |> x.Content.Load)) |> Map.ofList
         }
-        
+
         tileSet <- tiles |> List.map (fun (_,y) -> (y, getTile x.Content y)) |> Map.ofList
         //do toDependencies() |> Game.Model.IntoGame |> update
-         // TODO: use this.Content to load your game content here
+        // TODO: use this.Content to load your game content here
 
         ()
 
